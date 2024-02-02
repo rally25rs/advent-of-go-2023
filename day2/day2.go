@@ -55,8 +55,13 @@ func max(regexString string, line []byte) int {
 	return max
 }
 
+func calculatePower(game Game) int {
+	return game.Red * game.Green * game.Blue
+}
+
 func main() {
-	sum := 0
+	part1Sum := 0
+	part2Sum := 0
 
 	inputFile, err := os.Open("./input.txt")
 	if err != nil {
@@ -70,11 +75,13 @@ func main() {
 		game := processLine(line)
 		gameValid := game.Red <= MAX_RED && game.Green <= MAX_GREEN && game.Blue <= MAX_BLUE
 		if gameValid {
-			sum += game.Number
+			part1Sum += game.Number
 		}
+		part2Sum += calculatePower(game)
 		// fmt.Println("Line", string(line))
 		// fmt.Println("Game", game.Number, "Red:", game.Red, "Green:", game.Green, "Blue:", game.Blue, "Valid?", gameValid, "/n")
 	}
 
-	fmt.Println("Part 1: ", sum)
+	fmt.Println("Part 1: ", part1Sum)
+	fmt.Println("Part 2: ", part2Sum)
 }
