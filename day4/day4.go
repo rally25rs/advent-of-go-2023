@@ -10,8 +10,9 @@ import (
 	"strings"
 )
 
-func getLineValue(line string) int {
-	sum := 0
+func processCard(line string) (int, int) {
+	cardValue := 0
+	numWinningNumbers := 0
 	regexp := regexp.MustCompile(`([\d\ ]+)\|([\d\ ]+)`)
 	matches := regexp.FindStringSubmatch(line)
 	winningNumbers := strings.Split(matches[1], " ")
@@ -22,14 +23,45 @@ func getLineValue(line string) int {
 		}
 
 		if slices.Contains(winningNumbers, ourNumber) {
-			if sum == 0 {
-				sum = 1
+			numWinningNumbers += 1
+			if cardValue == 0 {
+				cardValue = 1
 			} else {
-				sum = sum * 2
+				cardValue = cardValue * 2
 			}
 		}
 	}
+	return cardValue, numWinningNumbers
+}
+
+func sumCardValues(cardInfo []CardInfo) int {
+	sum := 0
+	for _, card := range cardInfo {
+		sum += card.value
+	}
 	return sum
+}
+
+func countMoreCards(cardInfo []CardInfo, cardIndex int) int {
+	card := cardInfo[cardIndex]
+	count := 1
+	for i := 1; i <= card.numWinningNumbers; i++ {
+		count += countMoreCards(cardInfo, cardIndex+i)
+	}
+	return count
+}
+
+func countAllCards(cardInfo []CardInfo) int {
+	count := 0
+	for i := 0; i < len(cardInfo); i++ {
+		count += countMoreCards(cardInfo, i)
+	}
+	return count
+}
+
+type CardInfo struct {
+	value             int
+	numWinningNumbers int
 }
 
 func main() {
@@ -39,12 +71,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	cardInfo := make([]CardInfo, 0)
+
 	lineSplitter := bufio.NewScanner(inputFile)
-	sum := 0
 	for lineSplitter.Scan() {
 		line := lineSplitter.Text()
-		sum += getLineValue(line)
+		cardValue, numWinningNumbers := processCard(line)
+		cardInfo = append(cardInfo, CardInfo{cardValue, numWinningNumbers})
 	}
 
-	fmt.Println("Part 1:", sum) // sampleinput = 13 // input = 22897
+	fmt.Println("Part 1:", sumCardValues(cardInfo)) // sampleinput = 13 // input = 22897
+	fmt.Println("Part 2:", countAllCards(cardInfo)) // sampleinput = 30 // input = 5095824
 }
