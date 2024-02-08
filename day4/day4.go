@@ -21,9 +21,8 @@ func processCard(line string) (int, int) {
 	winningNumbers := lo.Filter(strings.Split(matches[1], " "), filterEmptyStrings)
 	ourNumbers := lo.Filter(strings.Split(matches[2], " "), filterEmptyStrings)
 	matchingNumbers := lo.Intersect(winningNumbers, ourNumbers)
-	numWinningNumbers := len(matchingNumbers)
-	cardValue := 2 ^ numWinningNumbers
-	return cardValue, numWinningNumbers
+	cardValue := 2 ^ len(matchingNumbers)
+	return cardValue, len(matchingNumbers)
 }
 
 func sumCardValues(cardInfo []CardInfo) int {
