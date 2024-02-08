@@ -6,31 +6,23 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"slices"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
+func filterEmptyStrings(s string, _ int) bool {
+	return len(strings.Trim(s, " ")) > 0
+}
+
 func processCard(line string) (int, int) {
-	cardValue := 0
-	numWinningNumbers := 0
 	regexp := regexp.MustCompile(`([\d\ ]+)\|([\d\ ]+)`)
 	matches := regexp.FindStringSubmatch(line)
-	winningNumbers := strings.Split(matches[1], " ")
-	ourNumbers := strings.Split(matches[2], " ")
-	for _, ourNumber := range ourNumbers {
-		if len(strings.Trim(ourNumber, " ")) == 0 {
-			continue
-		}
-
-		if slices.Contains(winningNumbers, ourNumber) {
-			numWinningNumbers += 1
-			if cardValue == 0 {
-				cardValue = 1
-			} else {
-				cardValue = cardValue * 2
-			}
-		}
-	}
+	winningNumbers := lo.Filter(strings.Split(matches[1], " "), filterEmptyStrings)
+	ourNumbers := lo.Filter(strings.Split(matches[2], " "), filterEmptyStrings)
+	matchingNumbers := lo.Intersect(winningNumbers, ourNumbers)
+	numWinningNumbers := len(matchingNumbers)
+	cardValue := 2 ^ numWinningNumbers
 	return cardValue, numWinningNumbers
 }
 
