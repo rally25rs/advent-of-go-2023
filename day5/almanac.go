@@ -21,11 +21,47 @@ type Almanac struct {
 	humidityToLocationMap    AlmanacMap
 }
 
-func (ami *AlmanacMap) GetDestination(source int) int {
+func NewAlmanac() *Almanac {
+	return &Almanac{
+		seedsToPlant: []int{},
+		seedToSoilMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		soilToFertilizerMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		fertilizerToWaterMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		waterToLightMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		lightToTemperatureMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		temperatureToHumidityMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+		humidityToLocationMap: AlmanacMap{
+			items: make([]AlmanacMapItem, 0),
+		},
+	}
+}
+
+func (am *AlmanacMap) GetDestination(source int) int {
+	for _, item := range am.items {
+		if source >= item.sourceStart && source < item.sourceStart+item.rangeLength {
+			dest := item.destStart + (source - item.sourceStart)
+			// fmt.Println(source, ">", dest)
+			return dest
+		}
+	}
+	// fmt.Println(source, ">", source)
 	return source
 }
 
 func (a *Almanac) GetLocationForSeed(seed int) int {
+	// fmt.Println("Seed", seed)
 	return a.humidityToLocationMap.GetDestination(
 		a.temperatureToHumidityMap.GetDestination(
 			a.lightToTemperatureMap.GetDestination(

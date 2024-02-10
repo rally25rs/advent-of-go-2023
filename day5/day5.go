@@ -13,5 +13,5 @@ func findMinLocation(almanac *Almanac) int {
 
 func Execute(filename string) {
 	almanac := readAlmanac(filename)
-	fmt.Println("Part 1:", findMinLocation(almanac))
+	fmt.Println("Part 1:", findMinLocation(almanac)) // sampleinput = 35
 }
