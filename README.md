@@ -7,8 +7,12 @@ So don't consider this to be "good" Go code. I'm learning it as I _go_.
 
 ## Running
 
-Each day is elf contained. Run a day via
+Run this module and pass in the day number to run.
 ```
-cd day1
-go run day1.go
+go run . {day_number}
+```
+
+For example, to run the Day 2 solution:
+```
+go run . 2
 ```

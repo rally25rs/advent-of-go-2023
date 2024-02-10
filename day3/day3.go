@@ -1,6 +1,6 @@
 // https://adventofcode.com/2023/day/3
 
-package main
+package day3
 
 import (
 	"bufio"
@@ -25,8 +25,8 @@ type gear struct {
 	adjacentNumbers []int
 }
 
-func readSchematic() []string {
-	inputFile, err := os.Open("./input.txt")
+func readSchematic(filename string) []string {
+	inputFile, err := os.Open(filename)
 	schematic := make([]string, 0, 100)
 	if err != nil {
 		log.Fatal(err)
@@ -143,8 +143,8 @@ func sumGearRatios(gears []gear) int {
 	return sum
 }
 
-func main() {
-	schematic := readSchematic()
+func Execute(filename string) {
+	schematic := readSchematic(filename)
 	partNumbers := locateNumbers(schematic)
 	fmt.Println("Part 1:", filterAndSum(partNumbers)) // 498559
 

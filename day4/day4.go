@@ -1,4 +1,4 @@
-package main
+package day4
 
 import (
 	"bufio"
@@ -55,8 +55,8 @@ type CardInfo struct {
 	numWinningNumbers int
 }
 
-func main() {
-	inputFile, err := os.Open("./input.txt")
+func Execute(filename string) {
+	inputFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)

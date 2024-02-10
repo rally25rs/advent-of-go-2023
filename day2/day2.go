@@ -1,6 +1,6 @@
 // https://adventofcode.com/2023/day/2
 
-package main
+package day2
 
 import (
 	"bufio"
@@ -59,11 +59,11 @@ func calculatePower(game Game) int {
 	return game.Red * game.Green * game.Blue
 }
 
-func main() {
+func Execute(filename string) {
 	part1Sum := 0
 	part2Sum := 0
 
-	inputFile, err := os.Open("./input.txt")
+	inputFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
@@ -78,8 +78,6 @@ func main() {
 			part1Sum += game.Number
 		}
 		part2Sum += calculatePower(game)
-		// fmt.Println("Line", string(line))
-		// fmt.Println("Game", game.Number, "Red:", game.Red, "Green:", game.Green, "Blue:", game.Blue, "Valid?", gameValid, "/n")
 	}
 
 	fmt.Println("Part 1: ", part1Sum)

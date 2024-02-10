@@ -1,6 +1,6 @@
 // https://adventofcode.com/2023/day/1
 
-package main
+package day1
 
 import (
 	"bufio"
@@ -70,14 +70,13 @@ func getLineValue(line []byte) int {
 	}
 
 	value := first*10 + last
-	fmt.Println("Line", string(line), "Value:", value)
 	return value
 }
 
-func main() {
+func Execute(filename string) {
 	sum := 0
 
-	inputFile, err := os.Open("./input.txt")
+	inputFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)

@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"advent-of-go/cmd"
+)
 
 func main() {
-	fmt.Println("Day 1")
+	cmd.Execute()
 }
