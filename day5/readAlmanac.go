@@ -22,7 +22,7 @@ func readNumbersFromLine(line string) []int {
 	return result
 }
 
-func readAlmanac(filename string) *Almanac {
+func readAlmanac(filename string) (*Almanac, []int) {
 	inputFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -31,6 +31,7 @@ func readAlmanac(filename string) *Almanac {
 
 	almanac := NewAlmanac()
 	var readIntoMap *AlmanacMap
+	var seedsToPlant []int
 
 	lineSplitter := bufio.NewScanner(inputFile)
 	for lineSplitter.Scan() {
@@ -41,7 +42,7 @@ func readAlmanac(filename string) *Almanac {
 		}
 
 		if strings.Index(line, "seeds:") == 0 {
-			almanac.seedsToPlant = readNumbersFromLine(line)
+			seedsToPlant = readNumbersFromLine(line)
 		} else if line == "seed-to-soil map:" {
 			readIntoMap = &almanac.seedToSoilMap
 		} else if line == "soil-to-fertilizer map:" {
@@ -68,5 +69,5 @@ func readAlmanac(filename string) *Almanac {
 			})
 		}
 	}
-	return almanac
+	return almanac, seedsToPlant
 }
