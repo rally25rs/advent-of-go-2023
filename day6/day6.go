@@ -14,7 +14,7 @@ type race struct {
 	distance int
 }
 
-func readInput(filename string) ([]race, error) {
+func readPart1Input(filename string) ([]race, error) {
 	digitsRegex := regexp.MustCompile(`\d+`)
 	inputFile, err := os.Open(filename)
 	if err != nil {
@@ -51,36 +51,36 @@ func readInput(filename string) ([]race, error) {
 	return races, nil
 }
 
-func getRaceOutcomes(race race) int {
-	wins := 0
+func getRaceOutcomes(race race) (int, error) {
 	for speed := 0; speed < race.time; speed++ {
 		timeToMove := race.time - speed
 		distanceMoved := speed * timeToMove
 		if distanceMoved > race.distance {
-			wins++
+			return race.time + 1 - speed - speed, nil
 		}
 	}
-	return wins
+	return 0, fmt.Errorf("Unwinnable")
 }
 
-func part1(races []race) int {
-	winValue := 0
+func part1(filename string) int {
+	races, err := readPart1Input(filename)
+	if err != nil {
+		log.Fatal("Error reading input:", err)
+		os.Exit(1)
+	}
+
+	winValue := 1
 	for _, race := range races {
-		numWins := getRaceOutcomes(race)
-		if winValue == 0 {
-			winValue = numWins
-		} else {
-			winValue = winValue * numWins
+		numWins, err := getRaceOutcomes(race)
+		if err != nil {
+			log.Fatal(err)
+			os.Exit(1)
 		}
+		winValue *= numWins
 	}
 	return winValue
 }
 
 func Execute(filename string) {
-	races, err := readInput(filename)
-	if err != nil {
-		log.Fatal("Error reading input:", err)
-		os.Exit(1)
-	}
-	fmt.Println("Part 1:", part1(races)) // sampleinput = 288 // input = 2269432
+	fmt.Println("Part 1:", part1(filename)) // sampleinput = 288 // input = 2269432
 }
